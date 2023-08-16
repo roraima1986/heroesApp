@@ -26,9 +26,12 @@ export class HeroPageComponent implements OnInit {
       )
       .subscribe(hero => {
         if(!hero) return this.router.navigate(['/heroes/list']);
-
-        return this.hero = hero;
-
+        this.hero = hero;
+        return;
       })
+  }
+
+  goBack():void{
+    this.router.navigateByUrl('heroes/list');
   }
 }
