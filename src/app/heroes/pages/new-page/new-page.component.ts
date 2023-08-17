@@ -2,7 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { switchMap } from 'rxjs';
+import { filter, switchMap, tap } from 'rxjs';
 
 // Angular Material
 import { MatDialog } from '@angular/material/dialog';
@@ -90,12 +90,26 @@ export class NewPageComponent implements OnInit {
       data: this.heroForm.value,
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed()
+      .pipe(
+        filter((result:boolean) => result === true),
+        switchMap(() => this.heroesServices.deleteHeroById(this.currentHero.id)),
+        filter((wasDeleted:boolean) => wasDeleted)
+      )
+      .subscribe(() => {
+        this.router.navigate(['/heroes']);
+      });
+
+
+    /*dialogRef.afterClosed().subscribe(result => {
       if(!result) return;
 
-      this.heroesServices.deleteHeroById(this.currentHero.id);
-      this.router.navigate(['/heroes'])
-    });
+      this.heroesServices.deleteHeroById(this.currentHero.id)
+        .subscribe(wasDeleted => {
+          if(wasDeleted) this.router.navigate(['/heroes']);
+        });
+
+    });*/
   }
 
   showSnackbar(message:string):void{
