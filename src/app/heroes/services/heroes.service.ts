@@ -1,7 +1,10 @@
+//Angular
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environments } from 'src/environments/environments';
 import { catchError, map, Observable, of } from 'rxjs';
+
+// Propias
+import { environments } from 'src/environments/environments';
 import { Hero } from '../interfaces/hero.interface';
 
 @Injectable({
